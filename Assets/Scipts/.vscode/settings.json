@@ -1,0 +1,5 @@
+{
+    "problems.visibility": true,
+    "editor.semanticHighlighting.enabled": true,
+    "csharp.semanticHighlighting.enabled": true,
+}
