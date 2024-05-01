@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerAttributes : MonoBehaviour
 {
-    public int playerHealth = 10;
+    public int maxHealth = 10;
+    public int playerHealth;
     public int hullLevel = 1;
     public float damageInterval = 1f;
     public int zoneDamage = 0;
@@ -14,7 +15,8 @@ public class PlayerAttributes : MonoBehaviour
     public bool underLevel = false;
     void Start()
     {
-            StartCoroutine(tickCheck());
+        playerHealth = maxHealth;
+        StartCoroutine(tickCheck());
         
     }
 
@@ -101,10 +103,10 @@ public class PlayerAttributes : MonoBehaviour
                 playerHealth -= zoneDamage;
                 Debug.Log("-" + zoneDamage.ToString() + " HP");
 
-               if(playerHealth <= 0)
-                {
-                    Destroy(gameObject, 1f);
-                }
+            //    if(playerHealth <= 0)
+            //     {
+            //         Destroy(gameObject, 1f);
+            //     }
 
                 // Wait for X seconds before continuing to the next iteration
                 yield return new WaitForSeconds(damageInterval);
