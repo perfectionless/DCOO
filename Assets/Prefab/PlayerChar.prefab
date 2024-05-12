@@ -114,7 +114,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &4209030208300275658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,12 +143,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84bed2109bd3b17488d0f9832e16ef91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 10
   playerHealth: 10
   hullLevel: 1
   damageInterval: 1
   zoneDamage: 0
   collectionLevel: 1
-  score: 0
+  collectedTrashValue: 0
+  playerScore: 0
   underLevel: 0
 --- !u!60 &9033445338758007489
 PolygonCollider2D:
