@@ -87,6 +87,11 @@ public class PlayerAttributes : MonoBehaviour
 
         }
 
+        if(collision.gameObject.tag == "Enemy") 
+        {
+            playerHealth = 0;
+        }
+
 
     }
     

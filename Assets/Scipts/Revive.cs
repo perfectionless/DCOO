@@ -31,10 +31,11 @@ public class Revive : MonoBehaviour
         PlayerAttributes playerAttributes = PlayerChar.GetComponent<PlayerAttributes>();
         playerAttributes.playerHealth = -999;
         playerAttributes.playerScore = 0;
-        PlayerPhysics.gravityScale = -2;
+        PlayerPhysics.gravityScale = -1;
 
         CameraMove camrascrip = camra.GetComponent<CameraMove>();
         Destroy(camrascrip);
+        PlayerChar.GetComponent<PolygonCollider2D>().enabled = false;
 
 
 
