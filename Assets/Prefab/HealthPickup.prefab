@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &4850225713081665993
+--- !u!1001 &7815229711647711069
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -8,21 +8,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 824191818544257274, guid: dea3dc77c917ac14cb73a52bcc7d5cfe, type: 3}
-      propertyPath: m_Radius
-      value: 2.16
-      objectReference: {fileID: 0}
-    - target: {fileID: 824191818544257274, guid: dea3dc77c917ac14cb73a52bcc7d5cfe, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1168494191249308544, guid: dea3dc77c917ac14cb73a52bcc7d5cfe, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.671704
+      value: -6.5380287
       objectReference: {fileID: 0}
     - target: {fileID: 1168494191249308544, guid: dea3dc77c917ac14cb73a52bcc7d5cfe, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.65351
+      value: -3.6984992
       objectReference: {fileID: 0}
     - target: {fileID: 1168494191249308544, guid: dea3dc77c917ac14cb73a52bcc7d5cfe, type: 3}
       propertyPath: m_LocalPosition.z
@@ -59,10 +51,10 @@ PrefabInstance:
     - target: {fileID: 4973100671812970311, guid: dea3dc77c917ac14cb73a52bcc7d5cfe, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 8b1c6c72c0a481943b7f3fed78369a57, type: 3}
+      objectReference: {fileID: 21300000, guid: 896b2ceba2582d64fb58167d2176dc96, type: 3}
     - target: {fileID: 7675917380724174721, guid: dea3dc77c917ac14cb73a52bcc7d5cfe, type: 3}
       propertyPath: m_Name
-      value: MagnetPowerup
+      value: HealthPickup
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 9113520517199833864, guid: dea3dc77c917ac14cb73a52bcc7d5cfe, type: 3}
@@ -71,24 +63,24 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7675917380724174721, guid: dea3dc77c917ac14cb73a52bcc7d5cfe, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3006392160481140589}
+      addedObject: {fileID: 2331782263846508937}
   m_SourcePrefab: {fileID: 100100000, guid: dea3dc77c917ac14cb73a52bcc7d5cfe, type: 3}
---- !u!1 &3010973726565819976 stripped
+--- !u!1 &500761801031987420 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7675917380724174721, guid: dea3dc77c917ac14cb73a52bcc7d5cfe, type: 3}
-  m_PrefabInstance: {fileID: 4850225713081665993}
+  m_PrefabInstance: {fileID: 7815229711647711069}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3006392160481140589
+--- !u!114 &2331782263846508937
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3010973726565819976}
+  m_GameObject: {fileID: 500761801031987420}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62b70c74e13b2e54d9a6cb406f36be48, type: 3}
+  m_Script: {fileID: 11500000, guid: f9e7b039f1ef0fc41a0ef1a7588f0cfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 3
-  duration: 10
+  HPRecoveryPercent: 0.25
+  FuelRecoveryPercent: 0.25

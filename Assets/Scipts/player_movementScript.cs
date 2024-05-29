@@ -35,7 +35,7 @@ public class player_movementScript : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift) && playerAttributes.speed <= playerAttributes.speedMax)
         {
           playerAttributes.speed = playerAttributes.speedMax;
-          
+
           if(!playerAttributes.hasUnlimitedFuel)
           {
             playerAttributes.fuel -= 0.01;
@@ -56,7 +56,7 @@ public class player_movementScript : MonoBehaviour
 
         
         // Flip sprite on X-axis when moving left
-        spriteRenderer.flipX = moveX < 0;
+        spriteRenderer.flipX = moveX > 0;
         
         if(!playerAttributes.hasUnlimitedFuel)
         {

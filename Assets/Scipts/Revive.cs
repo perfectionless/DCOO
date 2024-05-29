@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 using System;
 
@@ -32,7 +33,7 @@ public class Revive : MonoBehaviour
         PlayerAttributes playerAttributes = PlayerChar.GetComponent<PlayerAttributes>();
         playerAttributes.playerHealth = -999;
         playerAttributes.fuel = -999;
-        playerAttributes.playerScore = 0;
+        //playerAttributes.playerScore = 0;
         PlayerPhysics.gravityScale = -1;
 
         CameraMove camrascrip = camra.GetComponent<CameraMove>();
@@ -43,12 +44,13 @@ public class Revive : MonoBehaviour
 
         lossMsg.SetActive(!lossMsg.activeSelf);
 
-        
-
+        playerAttributes.isDead = true;
         reviveMenu.SetActive(false);
         Time.timeScale = 1f;
 
     }
+
+
 
     // public void UpgradeSpeed()
     // {

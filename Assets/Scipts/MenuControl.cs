@@ -6,6 +6,7 @@ public class MenuControl : MonoBehaviour
     public GameObject upgradeMenu;
     public GameObject reviveMenu;
     public GameObject PlayerChar;
+    public GameObject pauseMenu;
 
     void Start()
     {
@@ -23,6 +24,22 @@ public class MenuControl : MonoBehaviour
 
             // Pause or unpause the game depending on the active state of the UpgradeMenu
             if (upgradeMenu.activeSelf)
+            {
+                Time.timeScale = 0f; // Pause the game
+            }
+            else
+            {
+                Time.timeScale = 1f; // Unpause the game
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            // Toggle the visibility of the UpgradeMenu
+            pauseMenu.SetActive(!pauseMenu.activeSelf);
+
+            // Pause or unpause the game depending on the active state of the UpgradeMenu
+            if (pauseMenu.activeSelf)
             {
                 Time.timeScale = 0f; // Pause the game
             }

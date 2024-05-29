@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using UnityEngine;
 
 public class PlayerAttributes : MonoBehaviour
@@ -10,8 +11,8 @@ public class PlayerAttributes : MonoBehaviour
     public float speedMax;
     public double fuel;
     public double maxFuel = 10;
-    public int maxHealth = 10;
-    public int playerHealth;
+    public float maxHealth = 100;
+    public float playerHealth;
     public int hullLevel = 1;
     public float damageInterval = 1f;
     public int zoneDamage = 0;
@@ -24,6 +25,9 @@ public class PlayerAttributes : MonoBehaviour
     public float trashMagnetRadius;
     private float magnetDuration;
     public GameObject magnetIndicator;
+    public int activeZoneLevel;
+    public bool isDead;
+    public GameObject trashWarning;
     void Start()
     {
         originalSpeed = normalSpeed;
@@ -42,6 +46,21 @@ public class PlayerAttributes : MonoBehaviour
             ApplyTrashMagnet(trashMagnetRadius, magnetDuration);
             AttractTrashObjects();
         }
+
+        if(playerHealth >= maxHealth)
+        {
+            playerHealth = maxHealth;
+        }
+        
+        if(fuel >= maxFuel)
+        {
+            fuel = maxFuel;
+        }
+
+        if(!hasUnlimitedFuel)
+        {
+            fuel -= 0.0001;
+        }
         
     }
 
@@ -50,10 +69,11 @@ public class PlayerAttributes : MonoBehaviour
         if(trigger.gameObject.tag == "Zone")
         {
             ZoneScript zoneScript = trigger.gameObject.GetComponent<ZoneScript>();
+            activeZoneLevel = zoneScript.zoneLevel;
 
             if(zoneScript != null)
             {
-                if(hullLevel < zoneScript.zoneLevel)
+                if(hullLevel < activeZoneLevel)
                 {
                     underLevel = true;
                     zoneDamage = Mathf.Abs(hullLevel - zoneScript.zoneLevel);
@@ -67,7 +87,7 @@ public class PlayerAttributes : MonoBehaviour
             }
         }
 
-        if(trigger.gameObject.tag == "Deposit")
+        if(trigger.gameObject.tag == "Deposit" && !isDead)
         {
             if(collectedTrashValue > 0)
             {
@@ -81,7 +101,7 @@ public class PlayerAttributes : MonoBehaviour
             }
         }
 
-        if(trigger.gameObject.tag == "Trash")
+        if(trigger.gameObject.tag == "Trash" &&!isDead)
         {
             TrashScript trashScript = trigger.gameObject.GetComponent<TrashScript>();
 
@@ -92,6 +112,7 @@ public class PlayerAttributes : MonoBehaviour
                     playerHealth -= Mathf.Abs(collectionLevel - trashScript.trashTier);
                     Debug.Log("-" + trashScript.trashTier.ToString() + " HP");
                     Debug.Log("UPGRADE COLLECTOR LEVEL");
+                    StartCoroutine(trashWarn(2));
                 }
                 else
                 {
@@ -167,6 +188,7 @@ public class PlayerAttributes : MonoBehaviour
         yield return new WaitForSeconds(duration);
 
         // Optionally, play a sound or visual effect to indicate the end of the magnet effect
+        magnetIndicator.transform.localScale = magnetIndicator.transform.localScale / radius;
         magnetic = false;
         magnetIndicator.SetActive(false);
         collectionLevel -= 99;
@@ -181,6 +203,13 @@ public class PlayerAttributes : MonoBehaviour
         speed = normalSpeed;
         speedMax = (float)(normalSpeed * 1.5);
         hasUnlimitedFuel = false;
+    }
+
+    IEnumerator trashWarn(float duration)
+    {
+        trashWarning.SetActive(true);
+        yield return new WaitForSeconds(duration);
+        trashWarning.SetActive(false);
     }
     
 

@@ -12,6 +12,7 @@ public float maxSpawnInterval = 5f; // Maximum time between spawns
 public int maxTrashCount = 10; // Maximum number of trash objects in the game
 private float nextSpawnTime;
 private int currentTrashCount;
+public GameObject PlayerChar;
 
     // Start is called before the first frame update
     void Start()
@@ -43,32 +44,67 @@ private int currentTrashCount;
     void SpawnTrash()
     {
         float randomValue = Random.value; // Random value between 0 and 1
-
-        if (randomValue < 0.7f) // Adjust this threshold as needed
+        PlayerAttributes playerAttributes = PlayerChar.GetComponent<PlayerAttributes>();
+        int activeZone = playerAttributes.activeZoneLevel;
+        
+        if(activeZone == 1)
         {
-            GameObject selectedVariant = GetRandomVariant(trashT1Variants);
-            Instantiate(selectedVariant, GetRandomSpawnPoint(), Quaternion.identity);
-        }
-        else if (randomValue < 0.8f)
+            if (randomValue < 0.9f) // Adjust this threshold as needed
+            {
+                GameObject selectedVariant = GetRandomVariant(trashT1Variants);
+                Instantiate(selectedVariant, GetRandomSpawnPoint(), Quaternion.identity);
+            }
+            else
+            {
+                GameObject selectedVariant = GetRandomVariant(trashT2Variants);
+                Instantiate(selectedVariant, GetRandomSpawnPoint(), Quaternion.identity);
+            }
+        } else if(activeZone == 2)
         {
-            GameObject selectedVariant = GetRandomVariant(trashT2Variants);
-            Instantiate(selectedVariant, GetRandomSpawnPoint(), Quaternion.identity);
-        }
-        else
+            if (randomValue < 0.6f) // Adjust this threshold as needed
+            {
+                GameObject selectedVariant = GetRandomVariant(trashT1Variants);
+                Instantiate(selectedVariant, GetRandomSpawnPoint(), Quaternion.identity);
+            }
+            else if (randomValue < 0.9f)
+            {
+                GameObject selectedVariant = GetRandomVariant(trashT2Variants);
+                Instantiate(selectedVariant, GetRandomSpawnPoint(), Quaternion.identity);
+            }
+            else
+            {
+                GameObject selectedVariant = GetRandomVariant(trashT3Variants);
+                Instantiate(selectedVariant, GetRandomSpawnPoint(), Quaternion.identity);
+            }
+        } else if(activeZone == 3)
         {
-            GameObject selectedVariant = GetRandomVariant(trashT3Variants);
-            Instantiate(selectedVariant, GetRandomSpawnPoint(), Quaternion.identity);
+            if (randomValue < 0.1f) // Adjust this threshold as needed
+            {
+                GameObject selectedVariant = GetRandomVariant(trashT1Variants);
+                Instantiate(selectedVariant, GetRandomSpawnPoint(), Quaternion.identity);
+            }
+            else if (randomValue < 0.5f)
+            {
+                GameObject selectedVariant = GetRandomVariant(trashT2Variants);
+                Instantiate(selectedVariant, GetRandomSpawnPoint(), Quaternion.identity);
+            }
+            else
+            {
+                GameObject selectedVariant = GetRandomVariant(trashT3Variants);
+                Instantiate(selectedVariant, GetRandomSpawnPoint(), Quaternion.identity);
+            }
         }
     }
 
     Vector3 GetRandomSpawnPoint()
     {
         float minX, maxX, minY, maxY;
+        PlayerAttributes playerAttributes = PlayerChar.GetComponent<PlayerAttributes>();
 
 
         // Choose a random zone (L1, L2, or L3) and return the corresponding spawn point
-        int randomZone = Random.Range(1, 4); // 1, 2, or 3
-        switch (randomZone)
+        int activeZone = playerAttributes.activeZoneLevel; // 1, 2, or 3
+        switch (activeZone)
         {
             case 1: // ZoneL1
                 minX = (float)-8.5;
