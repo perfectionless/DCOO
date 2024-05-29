@@ -21,6 +21,7 @@ public class Revive : MonoBehaviour
     {
         PlayerAttributes playerAttributes = PlayerChar.GetComponent<PlayerAttributes>();
         playerAttributes.playerHealth = playerAttributes.maxHealth;
+        playerAttributes.fuel = playerAttributes.maxFuel;
 
         reviveMenu.SetActive(false);
         Time.timeScale = 1f;
@@ -30,6 +31,7 @@ public class Revive : MonoBehaviour
     {
         PlayerAttributes playerAttributes = PlayerChar.GetComponent<PlayerAttributes>();
         playerAttributes.playerHealth = -999;
+        playerAttributes.fuel = -999;
         playerAttributes.playerScore = 0;
         PlayerPhysics.gravityScale = -1;
 

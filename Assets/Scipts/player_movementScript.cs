@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class player_movementScript : MonoBehaviour
 {
-  public float speed = 1;
-  public float speedMax = 3;
-  public double fuel = 10;
+  public GameObject PlayerChar;
   public Rigidbody2D rb;
   private SpriteRenderer spriteRenderer;
 
@@ -19,6 +17,8 @@ public class player_movementScript : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
+    PlayerAttributes playerAttributes = PlayerChar.GetComponent<PlayerAttributes>();
+    
     Vector3 pos = transform.position;
     float moveX = Input.GetAxis("Horizontal");  // Get horizontal movement (-1 to 1)
     float moveY = Input.GetAxis("Vertical");    // Get vertical movement (-1 to 1)
@@ -27,19 +27,24 @@ public class player_movementScript : MonoBehaviour
     {
 
 
-    if (fuel > 0)
+    if (playerAttributes.fuel > 0)
     {
       
 
         // Movement with speed control using LeftShift
-        if (Input.GetKey(KeyCode.LeftShift) && speed <= speedMax)
+        if (Input.GetKey(KeyCode.LeftShift) && playerAttributes.speed <= playerAttributes.speedMax)
         {
-          speed = speedMax;
-          fuel -= 0.01;
+          playerAttributes.speed = playerAttributes.speedMax;
+          
+          if(!playerAttributes.hasUnlimitedFuel)
+          {
+            playerAttributes.fuel -= 0.01;
+
+          }
         }
-        else if (!Input.GetKey(KeyCode.LeftShift) && speed >= 1)
+        else if (!Input.GetKey(KeyCode.LeftShift) && playerAttributes.speed >= 1)
         {
-          speed = 1;
+          playerAttributes.speed = playerAttributes.normalSpeed;
         }
 
 
@@ -47,13 +52,18 @@ public class player_movementScript : MonoBehaviour
         Vector3 movement = new Vector3(moveX, moveY, 0f);
 
         // Update position based on movement and speed
-        pos += movement * speed * Time.deltaTime;
+        pos += movement * playerAttributes.speed * Time.deltaTime;
 
         
         // Flip sprite on X-axis when moving left
         spriteRenderer.flipX = moveX < 0;
+        
+        if(!playerAttributes.hasUnlimitedFuel)
+        {
+          playerAttributes.fuel -= 0.001; // Fuel consumption for movement
 
-        fuel -= 0.001; // Fuel consumption for movement
+        }
+
 
         transform.position = pos;
       }
@@ -61,4 +71,5 @@ public class player_movementScript : MonoBehaviour
     }
 
   }
+
 }

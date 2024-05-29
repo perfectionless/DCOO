@@ -55,5 +55,20 @@ public class MenuControl : MonoBehaviour
                 Time.timeScale = 1f; // Unpause the game
             }
         }
+
+        if (playerAttributes.fuel <= 0 && playerAttributes.playerHealth >= -100)
+        {
+            reviveMenu.SetActive(true);
+
+            // Pause or unpause the game depending on the active state of DEATH
+            if (reviveMenu.activeSelf)
+            {
+                Time.timeScale = 0f; // Pause the game
+            }
+            else
+            {
+                Time.timeScale = 1f; // Unpause the game
+            }
+        }
     }
 }

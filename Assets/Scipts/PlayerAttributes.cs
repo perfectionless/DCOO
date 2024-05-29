@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class PlayerAttributes : MonoBehaviour
 {
+    public float speed;
+    private float originalSpeed;
+    public float normalSpeed = 4;
+    public float speedMax;
+    public double fuel;
+    public double maxFuel = 10;
     public int maxHealth = 10;
     public int playerHealth;
     public int hullLevel = 1;
@@ -13,9 +19,18 @@ public class PlayerAttributes : MonoBehaviour
     public int collectedTrashValue = 0;
     public int playerScore = 0;
     public bool underLevel = false;
+    public bool hasUnlimitedFuel = false;
+    public bool magnetic = false;
+    public float trashMagnetRadius;
+    private float magnetDuration;
+    public GameObject magnetIndicator;
     void Start()
     {
+        originalSpeed = normalSpeed;
+        speed = normalSpeed;
+        speedMax = (float)(normalSpeed * 1.5);
         playerHealth = maxHealth;
+        fuel = maxFuel;
         StartCoroutine(tickCheck());
         
     }
@@ -23,6 +38,10 @@ public class PlayerAttributes : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(magnetic) {
+            ApplyTrashMagnet(trashMagnetRadius, magnetDuration);
+            AttractTrashObjects();
+        }
         
     }
 
@@ -61,13 +80,10 @@ public class PlayerAttributes : MonoBehaviour
                 Debug.Log("No trash collected yet!");
             }
         }
-    }
 
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(collision.gameObject.tag == "Trash")
+        if(trigger.gameObject.tag == "Trash")
         {
-            TrashScript trashScript = collision.gameObject.GetComponent<TrashScript>();
+            TrashScript trashScript = trigger.gameObject.GetComponent<TrashScript>();
 
             if(trashScript != null)
             {
@@ -81,11 +97,16 @@ public class PlayerAttributes : MonoBehaviour
                 {
                     collectedTrashValue += trashScript.trashValue;
                     Debug.Log("Collected trash value: " + collectedTrashValue.ToString());
-                    Destroy(collision.gameObject);
+                    Destroy(trigger.gameObject);
                 }
             }
 
         }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+
 
         if(collision.gameObject.tag == "Enemy") 
         {
@@ -93,6 +114,73 @@ public class PlayerAttributes : MonoBehaviour
         }
 
 
+    }
+
+    public void ApplySpeedBoost(float factor, float duration)
+    {
+        normalSpeed = originalSpeed * factor;
+        speedMax = (float)(normalSpeed * 1.5);
+        hasUnlimitedFuel = true;
+        
+        StartCoroutine(RevertSpeedAfterDuration(duration));
+
+    }
+
+    public void ApplyTrashMagnet(float magnetRadius, float magnetDuration)
+    {
+        if (!magnetic)
+        {
+            StartCoroutine(ActivateTrashMagnet(magnetRadius, magnetDuration));
+        }
+    }
+
+        private void AttractTrashObjects()
+    {
+        Collider2D[] trashColliders = Physics2D.OverlapCircleAll(transform.position, trashMagnetRadius);
+
+        foreach (Collider2D trashCollider in trashColliders)
+        {
+            if (trashCollider.CompareTag("Trash"))
+            {
+                Rigidbody2D trashRigidbody = trashCollider.GetComponent<Rigidbody2D>();
+                if (trashRigidbody != null)
+                {
+                    Vector2 directionToPlayer = transform.position - trashCollider.transform.position;
+                    trashRigidbody.AddForce(directionToPlayer.normalized * 1f); // Adjust force as needed
+                }
+            }
+        }
+    }
+
+    IEnumerator ActivateTrashMagnet(float radius, float duration)
+    {
+        trashMagnetRadius = radius;
+        magnetic = true;
+        collectionLevel += 99;
+        Debug.Log(magnetIndicator.transform.localScale);
+        magnetIndicator.transform.localScale = magnetIndicator.transform.localScale * radius;
+        Debug.Log(magnetIndicator.transform.localScale);
+        magnetIndicator.SetActive(true);
+        // Optionally, play a sound or visual effect to indicate the trash magnet activation
+
+        // Keep the magnet active for the specified duration
+        yield return new WaitForSeconds(duration);
+
+        // Optionally, play a sound or visual effect to indicate the end of the magnet effect
+        magnetic = false;
+        magnetIndicator.SetActive(false);
+        collectionLevel -= 99;
+    }
+
+    IEnumerator RevertSpeedAfterDuration(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        // Revert the speed back to the original value
+        normalSpeed = originalSpeed;
+        speed = normalSpeed;
+        speedMax = (float)(normalSpeed * 1.5);
+        hasUnlimitedFuel = false;
     }
     
 
