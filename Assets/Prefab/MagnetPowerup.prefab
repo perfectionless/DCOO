@@ -91,4 +91,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: 3
-  duration: 10
+  duration: 6

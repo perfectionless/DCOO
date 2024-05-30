@@ -9,6 +9,7 @@ TagManager:
   - Deposit
   - Enemy
   - Powerup
+  - Hazard
   layers:
   - Default
   - TransparentFX

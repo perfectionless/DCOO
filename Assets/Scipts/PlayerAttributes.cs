@@ -28,6 +28,8 @@ public class PlayerAttributes : MonoBehaviour
     public int activeZoneLevel;
     public bool isDead;
     public GameObject trashWarning;
+    public bool atMothership;
+    public Rigidbody2D PlayerPhysics;
     void Start()
     {
         originalSpeed = normalSpeed;
@@ -61,12 +63,45 @@ public class PlayerAttributes : MonoBehaviour
         {
             fuel -= 0.0001;
         }
+
+        if(atMothership)
+        {
+            playerHealth = maxHealth;
+            fuel = maxFuel;
+        }
+
+        if(gameObject.transform.position.y >= 6)
+        {
+            PlayerPhysics.gravityScale = 0;
+            PlayerPhysics.constraints = RigidbodyConstraints2D.FreezePosition;
+        }
         
     }
 
     void OnTriggerEnter2D(Collider2D trigger)
     {
         if(trigger.gameObject.tag == "Zone")
+        {
+            ZoneScript zoneScript = trigger.gameObject.GetComponent<ZoneScript>();
+            activeZoneLevel = zoneScript.zoneLevel;
+
+            if(zoneScript != null)
+            {
+                if(hullLevel < activeZoneLevel)
+                {
+                    underLevel = true;
+                    zoneDamage = Mathf.Abs(hullLevel - zoneScript.zoneLevel);
+                    Debug.Log("UPGRADE HULL LEVEL");
+
+                }
+                else
+                {
+                    underLevel = false;
+                }
+            }
+        }
+
+        if(trigger.gameObject.tag == "Hazard")
         {
             ZoneScript zoneScript = trigger.gameObject.GetComponent<ZoneScript>();
             activeZoneLevel = zoneScript.zoneLevel;
@@ -99,9 +134,13 @@ public class PlayerAttributes : MonoBehaviour
             {
                 Debug.Log("No trash collected yet!");
             }
+
+            atMothership = true; 
         }
 
-        if(trigger.gameObject.tag == "Trash" &&!isDead)
+
+
+        if(trigger.gameObject.tag == "Trash" && !isDead)
         {
             TrashScript trashScript = trigger.gameObject.GetComponent<TrashScript>();
 
@@ -109,7 +148,7 @@ public class PlayerAttributes : MonoBehaviour
             {
                 if(collectionLevel < trashScript.trashTier)
                 {
-                    playerHealth -= Mathf.Abs(collectionLevel - trashScript.trashTier);
+                    //playerHealth -= Mathf.Abs(collectionLevel - trashScript.trashTier);
                     Debug.Log("-" + trashScript.trashTier.ToString() + " HP");
                     Debug.Log("UPGRADE COLLECTOR LEVEL");
                     StartCoroutine(trashWarn(2));
@@ -123,6 +162,16 @@ public class PlayerAttributes : MonoBehaviour
             }
 
         }
+    }
+
+    void OnTriggerExit2D(Collider2D trigger)
+    {
+
+        if(trigger.gameObject.tag == "Deposit" && !isDead)
+        {
+            atMothership = false;            
+        }
+        
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -167,7 +216,7 @@ public class PlayerAttributes : MonoBehaviour
                 if (trashRigidbody != null)
                 {
                     Vector2 directionToPlayer = transform.position - trashCollider.transform.position;
-                    trashRigidbody.AddForce(directionToPlayer.normalized * 1f); // Adjust force as needed
+                    trashRigidbody.AddForce(directionToPlayer.normalized * 6f); // Adjust force as needed
                 }
             }
         }

@@ -7,6 +7,7 @@ public class MenuControl : MonoBehaviour
     public GameObject reviveMenu;
     public GameObject PlayerChar;
     public GameObject pauseMenu;
+    public GameObject needMorePoints;
 
     void Start()
     {
@@ -16,10 +17,15 @@ public class MenuControl : MonoBehaviour
 
     void Update()
     {
+
+        
+
+        PlayerAttributes playerAttributes = PlayerChar.GetComponent<PlayerAttributes>();
         // Check if the 'P' key is pressed
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.P) && playerAttributes.atMothership)
         {
             // Toggle the visibility of the UpgradeMenu
+            needMorePoints.SetActive(false);
             upgradeMenu.SetActive(!upgradeMenu.activeSelf);
 
             // Pause or unpause the game depending on the active state of the UpgradeMenu

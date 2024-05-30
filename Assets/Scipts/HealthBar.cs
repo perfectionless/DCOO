@@ -16,8 +16,10 @@ public class HealthBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
     PlayerAttributes playerAttributes = PlayerChar.GetComponent<PlayerAttributes>();
-    healthSlider.value = playerAttributes.playerHealth;
+    double healthPercentage = (playerAttributes.playerHealth / playerAttributes.maxHealth) * 100;
+    healthSlider.value = (float)healthPercentage;
 
         
     }
